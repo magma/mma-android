@@ -1,0 +1,55 @@
+// Copyright (c) 2016-present, Facebook, Inc.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree. An additional grant
+// of patent rights can be found in the PATENTS file in the same directory.
+
+syntax = "proto3";
+
+package magma.orc8r;
+
+import "metrics.proto";
+//import "orc8r/protos/common.proto";
+
+option java_multiple_files = true;
+option java_package = "io.openschema.mma.metricsd";
+option java_outer_classname = "OpenSchemaSDKProto";
+option objc_class_prefix = "HLW";
+
+
+
+message MetricsContainer {
+  string gatewayId = 1;
+  // TODO: we should strip this out of metricsd (or duplicate it ourselves)
+  // Prometheus 2 no longer supports protobuf client model
+  repeated MetricFamily family = 2;
+}
+
+message PushedMetric {
+  string   metricName        = 1;
+  double   value             = 2;
+  int64    timestampMS       = 3;
+  repeated LabelPair labels  = 4;
+}
+
+//message LabelPair {
+//  string name  = 1;
+//  string value = 2;
+//}
+
+message PushedMetricsContainer {
+  string   networkId = 1;
+  repeated PushedMetric metrics = 2;
+}
+
+message Void {
+}
+
+service MetricsController {
+  // Report a collection of metrics from a service
+  rpc Collect(MetricsContainer) returns (Void) {}
+
+  // Push a collection of metrics to metricsd
+  rpc Push(PushedMetricsContainer) returns (Void) {}
+}
