@@ -16,3 +16,9 @@ allprojects {
 		}
 	}
 ```
+
+
+## UE BootStrapping flow
+Picture below shows the call flow of UE registration and BootStrapping. Please note registration is not implemented yet.
+
+![UE success flow](docs/assets/ue_success_flow.png)
