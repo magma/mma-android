@@ -20,7 +20,7 @@ import java.security.spec.ECGenParameterSpec;
 import io.openschema.mma.helpers.KeyHelper;
 
 /**
- * Generate and Store Key
+ * Generate and Store HW Key
  */
 
 public class HardwareKEY {

@@ -41,6 +41,9 @@ import javax.net.ssl.TrustManagerFactory;
 import io.openschema.mma.R;
 import io.openschema.mma.bootstrapper.Challenge;
 
+/**
+ * Helper Class to generate keypairs for different stages of Bootstrapping
+ */
 public class KeyHelper {
 
     private static final String KEY_STORE = "AndroidKeyStore";

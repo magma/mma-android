@@ -6,6 +6,7 @@ import android.os.Bundle;
 import io.openschema.mma.id.Identity;
 import io.openschema.mma.metricsd.MetricsContainer;
 
+
 public class MetricsManager {
 
     private Context mContext;

@@ -5,6 +5,9 @@ import javax.net.ssl.SSLSocketFactory;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 
+/**
+ * Helper class to handle creation of gRPC channels.
+ */
 public class ChannelHelper {
 
     public static ManagedChannel getSecureManagedChannel(
