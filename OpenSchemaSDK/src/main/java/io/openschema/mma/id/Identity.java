@@ -17,24 +17,22 @@ import java.security.cert.CertificateException;
  */
 public class Identity {
 
-    private static String mUUID;
-    private static String mPublicKey;
-
+    private String mUUID;
+    private String mPublicKey;
 
     public Identity(Context context)
             throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, InvalidAlgorithmParameterException, NoSuchProviderException {
         mUUID = new UUID(context).getUUID();
         // TODO: Store the PK string to make sure same key is sent is used for registration and bootstrapping
-        mPublicKey = new HardwareKEY().getHwPublicKey();
+        mPublicKey = new HardwareKey().getHwPublicKey();
         Log.d("TestIdentity", mUUID + "\n" + mPublicKey);
     }
 
-
-    public static String getUUID() {
+    public String getUUID() {
         return mUUID;
     }
 
-    public static String getPublicKey() {
+    public String getPublicKey() {
         return mPublicKey;
     }
 }

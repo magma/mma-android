@@ -2,108 +2,104 @@ package io.openschema.mma;
 
 import android.content.Context;
 
+import org.spongycastle.operator.OperatorCreationException;
+
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SignatureException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import io.openschema.mma.bootstrap.BootStrapManager;
+import io.openschema.mma.id.Identity;
+import io.openschema.mma.register.RegistrationManager;
 
 public class MobileMetricsAgent {
 
+    private String mControllerAddress;
+    private String mBoostStrapperAddress;
+    private String mMetricsAuthorityHeader;
+    private int mControllerPort;
 
+    private Context mAppContext;
+    private RegistrationManager mRegistrationManager;
+    private BootStrapManager mBootStrapManager;
 
-
-    // Cloud Endpoint
-    private final String CONTROLLER_ADDRESS = "controller.openschema.magma.etagecom.io";
-    private final int CONTROLLER_PORT = 443;
-    private final String BOOTSTRAPPER_CONTROLLER_ADDRESS = "bootstrapper-" + CONTROLLER_ADDRESS;
-    private final String METRICS_AUTHORITY_HEADER = "metricsd-" + CONTROLLER_ADDRESS;
-
-    private String controllerAddress = CONTROLLER_ADDRESS;
-    private String boostStrapperAddress = BOOTSTRAPPER_CONTROLLER_ADDRESS;
-    private String metricsAuthorityHeader = METRICS_AUTHORITY_HEADER;
-    private int controllerPort = CONTROLLER_PORT;
-
-
-    private Context appContext;
-    private BootStrapManager bootStrapManager;
-
-
-    public MobileMetricsAgent(MobileMetricsAgentBuilder mmaBuilder) {
-        this.boostStrapperAddress = mmaBuilder.boostStrapperAddress;
-        this.controllerAddress = mmaBuilder.controllerAddress;
-        this.metricsAuthorityHeader = mmaBuilder.metricsAuthorityHeader;
-        this.controllerPort = mmaBuilder.controllerPort;
-        this.appContext = mmaBuilder.appContext;
-
+    public MobileMetricsAgent(Builder mmaBuilder) {
+        this.mBoostStrapperAddress = mmaBuilder.mBoostStrapperAddress;
+        this.mControllerAddress = mmaBuilder.mControllerAddress;
+        this.mMetricsAuthorityHeader = mmaBuilder.mMetricsAuthorityHeader;
+        this.mControllerPort = mmaBuilder.mControllerPort;
+        this.mAppContext = mmaBuilder.mAppContext;
     }
 
     public void init() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, NoSuchProviderException, InvalidAlgorithmParameterException, IOException {
-        this.bootStrapManager = new BootStrapManager(appContext);
-    }
-
-
-
-
-    public static class MobileMetricsAgentBuilder {
-        private String controllerAddress;
-        private String boostStrapperAddress;
-        private String metricsAuthorityHeader;
-        private int controllerPort;
-        private Context appContext;
-
-
-        public MobileMetricsAgentBuilder setControllerAddress(String address) {
-            this.controllerAddress = address;
-            return this;
-        }
-
-        public MobileMetricsAgentBuilder setBootStrapperAddress(String address) {
-            this.boostStrapperAddress = address;
-            return this;
-        }
-
-        public MobileMetricsAgentBuilder setAuthorityHeader(String address) {
-            this.metricsAuthorityHeader = address;
-            return this;
-        }
-
-        public MobileMetricsAgentBuilder setControllerPort(int port) {
-            this.controllerPort = port;
-            return this;
-        }
-
-        public MobileMetricsAgentBuilder setAppContext(Context context) {
-            this.appContext = context;
-            return this;
-        }
-
-        public MobileMetricsAgent buildMobileMetricsAgent() {
-            return new MobileMetricsAgent(this);
-        }
+        Identity identity = new Identity(mAppContext);
+        this.mRegistrationManager = new RegistrationManager(mAppContext, identity);
+        this.mBootStrapManager = new BootStrapManager(mAppContext, identity);
     }
 
     public String getControllerAddress() {
-        return controllerAddress;
+        return mControllerAddress;
     }
 
     public String getBoostStrapperAddress() {
-        return boostStrapperAddress;
+        return mBoostStrapperAddress;
     }
 
     public String getMetricsAuthorityHeader() {
-        return metricsAuthorityHeader;
+        return mMetricsAuthorityHeader;
     }
 
     public int getControllerPort() {
-        return controllerPort;
+        return mControllerPort;
     }
 
-    public BootStrapManager getBootStrapManager() {
-        return this.bootStrapManager;
+    public void bootstrap() throws IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, InvalidKeyException, SignatureException, OperatorCreationException, KeyStoreException, KeyManagementException {
+        mBootStrapManager.bootstrapNow(mControllerAddress, mControllerPort);
     }
 
+
+    public static class Builder {
+        private String mControllerAddress;
+        private String mBoostStrapperAddress;
+        private String mMetricsAuthorityHeader;
+        private int mControllerPort;
+        private Context mAppContext;
+
+
+        public Builder setControllerAddress(String address) {
+            mControllerAddress = address;
+            return this;
+        }
+
+        public Builder setBootStrapperAddress(String address) {
+            mBoostStrapperAddress = address;
+            return this;
+        }
+
+        public Builder setAuthorityHeader(String address) {
+            mMetricsAuthorityHeader = address;
+            return this;
+        }
+
+        public Builder setControllerPort(int port) {
+            mControllerPort = port;
+            return this;
+        }
+
+        public Builder setAppContext(Context context) {
+            mAppContext = context;
+            return this;
+        }
+
+        public MobileMetricsAgent build() {
+            return new MobileMetricsAgent(this);
+        }
+    }
 }
