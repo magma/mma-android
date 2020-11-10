@@ -23,7 +23,9 @@ import java.security.Signature;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Helper Class to generate Certificate Signing Request
+ */
 public class CsrHelper {
 
     private final static String DEFAULT_SIGNATURE_ALGORITHM = "SHA256withRSA";

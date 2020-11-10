@@ -31,8 +31,4 @@ public class CertSignRequest {
         Log.d("TestCSR", mCsr.getEncoded().toString());
         return ByteString.copyFrom(mCsr.getEncoded());
     }
-
-
-
-
 }

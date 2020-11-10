@@ -2,6 +2,9 @@ package io.openschema.mma.helpers;
 
 import com.google.protobuf.ByteString;
 
+/**
+ * Helper class for R and S byte operations.
+ */
 public class RandSByteString {
     private ByteString r;
     private ByteString s;
