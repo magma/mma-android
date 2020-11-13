@@ -17,6 +17,8 @@ import java.security.cert.CertificateException;
 
 import io.openschema.mma.bootstrap.BootStrapManager;
 import io.openschema.mma.id.Identity;
+import io.openschema.mma.networking.BackendApi;
+import io.openschema.mma.networking.RetrofitService;
 import io.openschema.mma.register.RegistrationManager;
 
 public class MobileMetricsAgent {
@@ -26,22 +28,34 @@ public class MobileMetricsAgent {
     private String mMetricsAuthorityHeader;
     private int mControllerPort;
 
+    private String mBackendBaseURL;
+    private int mCertificateResId;
+
     private Context mAppContext;
     private RegistrationManager mRegistrationManager;
     private BootStrapManager mBootStrapManager;
 
-    public MobileMetricsAgent(Builder mmaBuilder) {
-        this.mBoostStrapperAddress = mmaBuilder.mBoostStrapperAddress;
-        this.mControllerAddress = mmaBuilder.mControllerAddress;
-        this.mMetricsAuthorityHeader = mmaBuilder.mMetricsAuthorityHeader;
-        this.mControllerPort = mmaBuilder.mControllerPort;
-        this.mAppContext = mmaBuilder.mAppContext;
+    private MobileMetricsAgent(Builder mmaBuilder) {
+        mBoostStrapperAddress = mmaBuilder.mBoostStrapperAddress;
+        mControllerAddress = mmaBuilder.mControllerAddress;
+        mMetricsAuthorityHeader = mmaBuilder.mMetricsAuthorityHeader;
+        mControllerPort = mmaBuilder.mControllerPort;
+
+        mBackendBaseURL = mmaBuilder.mBackendBaseURL;
+        mCertificateResId = mmaBuilder.mCertificateResId;
+
+        mAppContext = mmaBuilder.mAppContext;
     }
 
     public void init() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, NoSuchProviderException, InvalidAlgorithmParameterException, IOException {
         Identity identity = new Identity(mAppContext);
-        this.mRegistrationManager = new RegistrationManager(mAppContext, identity);
-        this.mBootStrapManager = new BootStrapManager(mAppContext, identity);
+
+        RetrofitService mRetrofitService = RetrofitService.getService(mAppContext);
+        mRetrofitService.initApi(mAppContext, mBackendBaseURL, mCertificateResId);
+        BackendApi mBackendApi = mRetrofitService.getApi();
+
+        mRegistrationManager = new RegistrationManager(mAppContext, identity, mBackendApi);
+        mBootStrapManager = new BootStrapManager(mAppContext, identity);
     }
 
     public String getControllerAddress() {
@@ -60,6 +74,11 @@ public class MobileMetricsAgent {
         return mControllerPort;
     }
 
+    //TODO: Merge register & bootstrap into init(), they need to be called sequentially
+    public void register() {
+        mRegistrationManager.register();
+    }
+
     public void bootstrap() throws IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, InvalidKeyException, SignatureException, OperatorCreationException, KeyStoreException, KeyManagementException {
         mBootStrapManager.bootstrapNow(mControllerAddress, mControllerPort);
     }
@@ -70,6 +89,10 @@ public class MobileMetricsAgent {
         private String mBoostStrapperAddress;
         private String mMetricsAuthorityHeader;
         private int mControllerPort;
+
+        private String mBackendBaseURL;
+        private int mCertificateResId;
+
         private Context mAppContext;
 
 
@@ -90,6 +113,16 @@ public class MobileMetricsAgent {
 
         public Builder setControllerPort(int port) {
             mControllerPort = port;
+            return this;
+        }
+
+        public Builder setBackendBaseURL(String baseURL) {
+            mBackendBaseURL = baseURL;
+            return this;
+        }
+
+        public Builder setCertificateResId(int certificateResId) {
+            mCertificateResId = certificateResId;
             return this;
         }
 

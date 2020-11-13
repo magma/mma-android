@@ -71,6 +71,7 @@ public class BootStrapManager {
         CertificateFactory cf = CertificateFactory.getInstance(CERT_TYPE);
         InputStream in = context.getResources().openRawResource(R.raw.rootca);
         java.security.cert.Certificate rootcert = cf.generateCertificate(in);
+        in.close();
         mKeyStore.setCertificateEntry("rootca", rootcert);
         String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
         mTrustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm);

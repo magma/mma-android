@@ -12,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String BOOTSTRAPPER_CONTROLLER_ADDRESS = "bootstrapper-" + CONTROLLER_ADDRESS;
     private static final String METRICS_AUTHORITY_HEADER = "metricsd-" + CONTROLLER_ADDRESS;
 
+    private static final String OPENSCHEMA_BACKEND_BASE_URL = "https://13.52.214.86:3100/";
+    private static final int CERTIFICATE_RESOURCE_ID = R.raw.server;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,10 +26,13 @@ public class MainActivity extends AppCompatActivity {
                 .setControllerAddress(CONTROLLER_ADDRESS)
                 .setBootStrapperAddress(BOOTSTRAPPER_CONTROLLER_ADDRESS)
                 .setControllerPort(CONTROLLER_PORT)
+                .setBackendBaseURL(OPENSCHEMA_BACKEND_BASE_URL)
+                .setCertificateResId(CERTIFICATE_RESOURCE_ID)
                 .build();
 
         try {
             mma.init();
+//            mma.register();
             mma.bootstrap();
         } catch (Exception e) {
             e.printStackTrace();
