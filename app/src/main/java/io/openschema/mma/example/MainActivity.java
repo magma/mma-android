@@ -2,23 +2,39 @@ package io.openschema.mma.example;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.spongycastle.operator.OperatorCreationException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
 
 import io.openschema.mma.MobileMetricsAgent;
 import io.openschema.mma.bootstrap.BootStrapManager;
+import io.openschema.mma.metrics.MetricsManager;
+import io.openschema.mma.metrics.MetricsService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,5 +82,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
+
+        // TODO: Move this inside MobileMetricsAgent
+        MetricsManager mMmanager = new MetricsManager(getApplicationContext(), mmaBuilder.getBootStrapManager().getClientCert(), true);
+
+
     }
 }

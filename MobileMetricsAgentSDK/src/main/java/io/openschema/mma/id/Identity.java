@@ -26,6 +26,7 @@ public class Identity {
         mUUID = new UUID(context).getUUID();
         // TODO: Store the PK string to make sure same key is sent is used for registration and bootstrapping
         mPublicKey = new HardwareKEY().getHwPublicKey();
+        //ToDo: Remove me
         Log.d("TestIdentity", mUUID + "\n" + mPublicKey);
     }
 

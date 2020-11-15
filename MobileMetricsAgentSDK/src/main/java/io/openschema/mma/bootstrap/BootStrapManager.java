@@ -67,6 +67,8 @@ public class BootStrapManager {
     private KeyStore keyStore;
     private SSLContext sslContext;
 
+    private java.security.cert.Certificate clientCert;
+
 
 
     private boolean bootStrapSuccess;
@@ -157,22 +159,18 @@ public class BootStrapManager {
 
         storeSignedCertificate(certificate);
 
+        CertificateFactory cf = CertificateFactory.getInstance(CERT_TYPE);
+        clientCert = cf.generateCertificate(certificate.getCertDer().newInput());
+
         bootStrapSuccess = true;
 
-//        kmf.init(keyStore, password.toCharArray());
-//        SSLContext context = SSLContext.getInstance("TLS");
-//        context.init(kmf.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
-
-//        bootStrapChannel = OkHttpChannelBuilder.forAddress(CONTROLLER_ADDRESS, 443)
-//                .useTransportSecurity()
-//                .sslSocketFactory(context.getSocketFactory())
-//                .overrideAuthority(METRICS_AUTHORITY_HEADER)
-//                .build();
-//
-//        MetricsControllerGrpc.MetricsControllerBlockingStub stub2 = MetricsControllerGrpc.newBlockingStub(bootStrapChannel);
     }
 
     public boolean isBootStrapSuccess() {
         return bootStrapSuccess;
+    }
+
+    public java.security.cert.Certificate getClientCert() {
+        return clientCert;
     }
 }
