@@ -18,7 +18,7 @@ import io.openschema.mma.identity.Identity;
  */
 public class ChallengeResponse {
 
-    private static Response mResponse;
+    private Response mResponse;
 
     public ChallengeResponse(String uuid,
                     Challenge challenge,
@@ -54,7 +54,7 @@ public class ChallengeResponse {
 
     }
 
-    public static Response getResponse(){
+    public Response getResponse(){
         return mResponse;
     }
 

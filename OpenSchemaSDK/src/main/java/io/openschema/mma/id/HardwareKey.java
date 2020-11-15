@@ -23,47 +23,41 @@ import io.openschema.mma.helpers.KeyHelper;
  * Generate and Store HW Key
  */
 
-public class HardwareKEY {
+public class HardwareKey {
 
-    private static String mHwPublicKey;
+    private static final String HW_KEY_ALIAS = "hw_key_alias";
+    private static final String KEY_STORE = "AndroidKeyStore";
+    private static final int KEY_SIZE = 256;
 
-    private final String HW_KEY_ALIAS = "hw_key_alias";
-    private final String KEY_STORE = "AndroidKeyStore";
-    private final int KEY_SIZE = 256;
+    private String mHwPublicKey;
 
-
-    public HardwareKEY()
+    public HardwareKey()
             throws CertificateException, NoSuchAlgorithmException, KeyStoreException, NoSuchProviderException, InvalidAlgorithmParameterException, IOException {
         generateECKeyPairForAlias(HW_KEY_ALIAS, KEY_SIZE);
     }
 
-
-    private boolean keyExist(String alias) throws
-            CertificateException, NoSuchAlgorithmException, IOException, KeyStoreException {
+    private String loadKey(String alias) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         KeyStore ks = KeyStore.getInstance(KEY_STORE);
         ks.load(null);
-        Certificate cert = ks.getCertificate(alias);
-        if(cert == null){
-            return false;
-        } else {
-            return true;
+        if (ks.getCertificate(alias) != null) {
+            return KeyHelper.getPubKeyString(ks.getCertificate(alias).getPublicKey());
         }
-    }
 
+        return null;
+    }
 
     private void generateECKeyPairForAlias(String alias, int size)
             throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, InvalidAlgorithmParameterException, NoSuchProviderException {
-        if(keyExist(alias)){
-            KeyStore ks = KeyStore.getInstance(KEY_STORE);
-            ks.load(null);
-            if(ks.getCertificate(alias) != null) {
-                mHwPublicKey = KeyHelper.getPubKeyString(ks.getCertificate(alias).getPublicKey());
-            }
-        } else {
+
+        //Load key from saved keystore
+        mHwPublicKey = loadKey(alias);
+
+        if (mHwPublicKey == null) {
+            //Generate new key if none was found
             KeyPairGenerator kpg = KeyPairGenerator.getInstance(
                     KeyProperties.KEY_ALGORITHM_EC, KEY_STORE);
 
-            kpg.initialize(new KeyGenParameterSpec.Builder( alias,
+            kpg.initialize(new KeyGenParameterSpec.Builder(alias,
                     KeyProperties.PURPOSE_SIGN | KeyProperties.PURPOSE_VERIFY)
                     //TODO: make the ec spec parametric
                     .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
@@ -78,9 +72,7 @@ public class HardwareKEY {
     }
 
 
-    public static String getHwPublicKey(){
+    public String getHwPublicKey() {
         return mHwPublicKey;
     }
-
-
 }

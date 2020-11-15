@@ -16,18 +16,18 @@ import io.openschema.mma.helpers.CsrHelper;
 
 public class CertSignRequest {
 
-    private static PKCS10CertificationRequest mCsr;
+    private PKCS10CertificationRequest mCsr;
 
     public CertSignRequest(KeyPair kp, String uuid)
             throws IOException, OperatorCreationException {
         mCsr = CsrHelper.generateCSR(kp, uuid);
     }
 
-    public static PKCS10CertificationRequest getCSR(){
+    public PKCS10CertificationRequest getCSR(){
         return mCsr;
     }
 
-    public static ByteString getCSRByteString() throws IOException {
+    public ByteString getCSRByteString() throws IOException {
         Log.d("TestCSR", mCsr.getEncoded().toString());
         return ByteString.copyFrom(mCsr.getEncoded());
     }
