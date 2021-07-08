@@ -62,61 +62,20 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
 
             //Build OpenSchema agent with required data
-            mMobileMetricsAgent = new MobileMetricsAgent.Builder()
-                    .setAppContext(getApplicationContext())
-                    .setCustomNotification(createCustomNotification())
-                    .setBackendBaseURL(getString(R.string.backend_base_url))
-                    .setBackendCertificateResId(R.raw.backend)
-                    .setBackendUsername(getString(R.string.backend_username))
-                    .setBackendPassword(getString(R.string.backend_password))
-                    .build();
-
-            //Initialize agent
-            mMobileMetricsAgent.init();
+//            mMobileMetricsAgent = new MobileMetricsAgent.Builder()
+//                    .setAppContext(getApplicationContext())
+//                    .setCustomNotification(createCustomNotification())
+//                    .setBackendBaseURL(getString(R.string.backend_base_url))
+//                    .setBackendCertificateResId(R.raw.backend)
+//                    .setBackendUsername(getString(R.string.backend_username))
+//                    .setBackendPassword(getString(R.string.backend_password))
+//                    .build();
+//
+//            //Initialize agent
+//            mMobileMetricsAgent.init();
 
             //TESTING:
             UsageRetriever usageRetriever = new UsageRetriever(this);
-//            //5pm to 6pm
-//            long windowTotal = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625695200000L, 1625698800000L);
-//            //15m increments
-//            long windowQ1 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625695200000L, 1625696100000L);
-//            long windowQ2 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625696100000L, 1625697000000L);
-//            long windowQ3 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625697000000L, 1625697900000L);
-//            long windowQ4 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625697900000L, 1625698800000L);
-//
-//            //5:25pm to 5:35pm
-//            long window1 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625696700000L, 1625697300000L);
-//            //5:45pm to 5:55pm
-//            long window2 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625697900000L, 1625698500000L);
-//            //5:10pm to 5:20pm
-//            long window3 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625695800000L, 1625696400000L);
-//            //5:00pm to 5:30pm
-//            long window4 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625695200000L, 1625697000000L);
-//            //5:15pm to 5:45pm
-//            long window5 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625696100000L, 1625697900000L);
-//
-//            //4:00pm to 5:00pm
-//            long window6 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625691600000L, 1625695200000L);
-//            //6:00pm to 7:00pm
-//            long window7 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625698800000L, 1625702400000L);
-//
-//            //4:30pm to 5:30pm
-//            long window8 = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625693400000L, 1625697000000L);
-//
-//            Log.d("TESTING", "UI: 5pm-6pm: " + FormattingUtils.humanReadableByteCountSI(windowTotal) +
-//                    "\n5:00pm-5:15pm: " + FormattingUtils.humanReadableByteCountSI(windowQ1) +
-//                    "\n5:15pm-5:30pm: " + FormattingUtils.humanReadableByteCountSI(windowQ2) +
-//                    "\n5:30pm-5:45pm: " + FormattingUtils.humanReadableByteCountSI(windowQ3) +
-//                    "\n5:45pm-6:00pm: " + FormattingUtils.humanReadableByteCountSI(windowQ4) +
-//                    "\n5:25pm-5:35pm: " + FormattingUtils.humanReadableByteCountSI(window1) +
-//                    "\n5:45pm-5:55pm: " + FormattingUtils.humanReadableByteCountSI(window2) +
-//                    "\n5:10pm-5:20pm: " + FormattingUtils.humanReadableByteCountSI(window3) +
-//                    "\n5:00pm-5:30pm: " + FormattingUtils.humanReadableByteCountSI(window4) +
-//                    "\n5:15pm-5:45pm: " + FormattingUtils.humanReadableByteCountSI(window5) +
-//                    "\n4:00pm-5:00pm: " + FormattingUtils.humanReadableByteCountSI(window6) +
-//                    "\n6:00pm-7:00pm: " + FormattingUtils.humanReadableByteCountSI(window7) +
-//                    "\n4:30pm-5:30pm: " + FormattingUtils.humanReadableByteCountSI(window8));
-
 
             //4pm to 5pm 7/8
             long windowTotal = usageRetriever.getDeviceTonnage(NetworkCapabilities.TRANSPORT_WIFI, 1625778000000L, 1625781600000L);
